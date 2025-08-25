@@ -1,59 +1,52 @@
-package com.Java_AWS_Project.goal;
+package com.Java_AWS_Project.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GoalEvent {
-    private Long goalId;
+public class ClientEvent {
     private Long clientId;
     private String eventType;
-    private String goalName;
-    private BigDecimal targetAmount;
+    private String clientName;
+    private String clientEmail;
     
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
 
-    public GoalEvent() {}
+    public ClientEvent() {}
 
-    public GoalEvent(Long goalId, Long clientId, String eventType, String goalName, BigDecimal targetAmount) {
-        this.goalId = goalId;
+    public ClientEvent(Long clientId, String eventType, String clientName, String clientEmail) {
         this.clientId = clientId;
         this.eventType = eventType;
-        this.goalName = goalName;
-        this.targetAmount = targetAmount;
+        this.clientName = clientName;
+        this.clientEmail = clientEmail;
         this.timestamp = LocalDateTime.now();
     }
 
     // Getters and Setters
-    public Long getGoalId() { return goalId; }
-    public void setGoalId(Long goalId) { this.goalId = goalId; }
-
     public Long getClientId() { return clientId; }
     public void setClientId(Long clientId) { this.clientId = clientId; }
 
     public String getEventType() { return eventType; }
     public void setEventType(String eventType) { this.eventType = eventType; }
 
-    public String getGoalName() { return goalName; }
-    public void setGoalName(String goalName) { this.goalName = goalName; }
+    public String getClientName() { return clientName; }
+    public void setClientName(String clientName) { this.clientName = clientName; }
 
-    public BigDecimal getTargetAmount() { return targetAmount; }
-    public void setTargetAmount(BigDecimal targetAmount) { this.targetAmount = targetAmount; }
+    public String getClientEmail() { return clientEmail; }
+    public void setClientEmail(String clientEmail) { this.clientEmail = clientEmail; }
 
     public LocalDateTime getTimestamp() { return timestamp; }
     public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
     @Override
     public String toString() {
-        return "GoalEvent{" +
-                "goalId=" + goalId +
-                ", clientId=" + clientId +
+        return "ClientEvent{" +
+                "clientId=" + clientId +
                 ", eventType='" + eventType + '\'' +
-                ", goalName='" + goalName + '\'' +
-                ", targetAmount=" + targetAmount +
+                ", clientName='" + clientName + '\'' +
+                ", clientEmail='" + clientEmail + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
     }

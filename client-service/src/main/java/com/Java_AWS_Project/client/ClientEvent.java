@@ -1,12 +1,17 @@
 package com.Java_AWS_Project.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientEvent {
     private Long clientId;
     private String eventType;
     private String clientName;
     private String clientEmail;
+    
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
 
     public ClientEvent() {}
