@@ -32,6 +32,12 @@ public class GoalGraphQL {
     @QueryMapping
     public Goal getGoal(@Argument Long id) {
         logger.info("GraphQL Query: Fetching goal by id={}", id);
+        
+        // Validate input parameter
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Goal ID must be a positive number");
+        }
+        
         return goalService.getGoalById(id);
     }
 
@@ -39,6 +45,12 @@ public class GoalGraphQL {
     @QueryMapping
     public List<Goal> getGoalsByClient(@Argument Long clientId) {
         logger.info("GraphQL Query: Fetching goals for clientId={}", clientId);
+        
+        // Validate input parameter
+        if (clientId == null || clientId <= 0) {
+            throw new IllegalArgumentException("Client ID must be a positive number");
+        }
+        
         return goalService.getGoalsByClient(clientId);
     }
 
@@ -48,10 +60,24 @@ public class GoalGraphQL {
                            @Argument String goalName,
                            @Argument Double goalAmount) {
         logger.info("GraphQL Mutation: Creating goal '{}' for clientId={}, amount={}", goalName, clientId, goalAmount);
+        
+        // Validate input parameters
+        if (clientId == null || clientId <= 0) {
+            throw new IllegalArgumentException("Client ID must be a positive number");
+        }
+        if (goalName == null || goalName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Goal name cannot be empty");
+        }
+        if (goalAmount == null || goalAmount <= 0) {
+            throw new IllegalArgumentException("Goal amount must be greater than 0");
+        }
+        
+        // Create Goal entity from validated input
         Goal goal = new Goal();
         goal.setClientId(clientId);
-        goal.setGoalName(goalName);
+        goal.setGoalName(goalName.trim());
         goal.setTargetAmount(java.math.BigDecimal.valueOf(goalAmount));
+        
         return goalService.createGoal(goal);
     }
 
@@ -61,9 +87,23 @@ public class GoalGraphQL {
                            @Argument String goalName,
                            @Argument Double goalAmount) {
         logger.info("GraphQL Mutation: Updating goal id={}, name={}, amount={}", id, goalName, goalAmount);
+        
+        // Validate input parameters
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Goal ID must be a positive number");
+        }
+        if (goalName == null || goalName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Goal name cannot be empty");
+        }
+        if (goalAmount == null || goalAmount <= 0) {
+            throw new IllegalArgumentException("Goal amount must be greater than 0");
+        }
+        
+        // Create Goal entity from validated input
         Goal goalDetails = new Goal();
-        goalDetails.setGoalName(goalName);
+        goalDetails.setGoalName(goalName.trim());
         goalDetails.setTargetAmount(java.math.BigDecimal.valueOf(goalAmount));
+        
         return goalService.updateGoal(id, goalDetails);
     }
 
@@ -71,6 +111,12 @@ public class GoalGraphQL {
     @MutationMapping
     public Boolean deleteGoal(@Argument Long id) {
         logger.info("GraphQL Mutation: Deleting goal id={}", id);
+        
+        // Validate input parameter
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Goal ID must be a positive number");
+        }
+        
         goalService.deleteGoal(id);
         return true;
     }
