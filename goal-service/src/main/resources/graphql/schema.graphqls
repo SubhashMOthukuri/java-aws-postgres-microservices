@@ -1,0 +1,42 @@
+# Scalars (basic data types)
+scalar ID
+scalar String
+scalar Float
+
+# Entities
+type Client {
+    id: ID!
+    name: String!
+    email: String!
+}
+
+type Goal {
+    id: ID!
+    clientId: ID!
+    goalName: String!
+    targetAmount: Float!
+}
+
+# Queries (Read operations)
+type Query {
+    # Clients
+    getClientById(id: ID!): Client
+    getAllClients: [Client]
+
+    # Goals
+    getAllGoals: [Goal]
+    getGoalsByClient(clientId: ID!): [Goal]
+}
+
+# Mutations (Write operations)
+type Mutation {
+    # Client mutations
+    createClient(name: String!, email: String!): Client
+    updateClient(id: ID!, name: String!, email: String!): Client
+    deleteClient(id: ID!): Boolean
+
+    # Goal mutations
+    createGoal(clientId: ID!, goalName: String!, goalAmount: Float!): Goal
+    updateGoal(id: ID!, goalName: String!, goalAmount: Float!): Goal
+    deleteGoal(id: ID!): Boolean
+}

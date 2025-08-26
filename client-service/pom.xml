@@ -93,6 +93,12 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!-- GraphQL Support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
