@@ -1,0 +1,115 @@
+version: '3.8'
+
+# 🚀 Java AWS PostgreSQL Microservices - Local Development
+# This docker-compose file sets up the required infrastructure services
+
+services:
+  # Redis Cache Service
+  redis:
+    image: redis:7-alpine
+    container_name: microservices-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - microservices-network
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: microservices-rabbitmq
+    ports:
+      - "5672:5672"      # AMQP protocol
+      - "15672:15672"    # Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - microservices-network
+
+  # PostgreSQL Database (for production-like testing)
+  postgres:
+    image: postgres:15-alpine
+    container_name: microservices-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=microservices
+      - POSTGRES_USER=microservice_user
+      - POSTGRES_PASSWORD=microservice_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U microservice_user -d microservices"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - microservices-network
+
+  # H2 Console (Optional - for development)
+  h2-console:
+    image: oscarfonts/h2
+    container_name: microservices-h2-console
+    ports:
+      - "8082:81"
+    environment:
+      - H2_OPTIONS=-ifNotExists
+    volumes:
+      - h2_data:/h2-data
+    networks:
+      - microservices-network
+
+volumes:
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  rabbitmq_logs:
+    driver: local
+  postgres_data:
+    driver: local
+  h2_data:
+    driver: local
+
+networks:
+  microservices-network:
+    driver: bridge
+    name: microservices-network
+
+# 🎯 Usage Instructions:
+#
+# 1. Start infrastructure services:
+#    docker-compose up -d
+#
+# 2. Access services:
+#    - Redis: localhost:6379
+#    - RabbitMQ: http://localhost:15672 (guest/guest)
+#    - PostgreSQL: localhost:5432
+#    - H2 Console: http://localhost:8082
+#
+# 3. Stop services:
+#    docker-compose down
+#
+# 4. View logs:
+#    docker-compose logs -f [service-name]
+#
+# 5. Clean up (removes volumes):
+#    docker-compose down -v
