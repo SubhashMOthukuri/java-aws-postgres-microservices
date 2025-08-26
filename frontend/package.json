@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.0",
-    "@apollo/client/core": "^3.8.0",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
     "apollo-upload-client": "^17.0.0",
     "graphql": "^16.8.0",
     "react": "^18.2.0",

@@ -2,9 +2,9 @@
 // This page lets users view, create, edit, and delete clients
 
 import React, { useState } from 'react';
-import { useClients } from '@/hooks/useClients';
-import { ClientForm } from '@/components/ClientForm';
-import { Client, ClientInput } from '@/types';
+import { useClients } from '../hooks/useClients';
+import { ClientForm } from '../components/ClientForm';
+import { Client, ClientInput } from '../types';
 
 // 👥 The ClientsPage component
 export const ClientsPage: React.FC = () => {
@@ -143,7 +143,7 @@ export const ClientsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {clients.map((client) => (
+                {clients.map((client: Client) => (
                   <tr key={client.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">

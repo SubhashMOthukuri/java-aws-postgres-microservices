@@ -2,7 +2,7 @@
 // This component lets users create new goals or edit existing ones
 
 import React, { useState, useEffect } from 'react';
-import { Goal, GoalInput, Client } from '@/types';
+import { Goal, GoalInput, Client } from '../types';
 
 // 📝 Props for the GoalForm component
 interface GoalFormProps {

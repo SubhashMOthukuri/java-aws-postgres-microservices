@@ -5,12 +5,14 @@ import { useQuery, useMutation, useApolloClient } from '@apollo/client';
 import { 
   GET_ALL_GOALS, 
   GET_GOAL_BY_ID, 
-  GET_GOALS_BY_CLIENT,
+  GET_GOALS_BY_CLIENT
+} from '../graphql/queries';
+import { 
   CREATE_GOAL, 
   UPDATE_GOAL, 
   DELETE_GOAL 
-} from '@/graphql/queries';
-import { Goal, GoalInput } from '@/types';
+} from '../graphql/mutations';
+import { Goal, GoalInput } from '../types';
 
 // 🪝 Hook for managing goals
 export const useGoals = () => {

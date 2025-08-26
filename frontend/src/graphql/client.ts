@@ -1,7 +1,7 @@
 // 🔌 Apollo Client Configuration
 // This sets up how our frontend talks to our GraphQL services
 
-import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink, from, ApolloLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 
@@ -57,17 +57,50 @@ export const goalServiceClient = new ApolloClient({
   version: '1.0.0',
 });
 
-// 🔌 Combined Client - for operations that need both services
+// 🔌 Smart Combined Client - routes requests to appropriate service
+const smartLink = new ApolloLink((operation, forward) => {
+  // Get the operation name to determine which service to use
+  const operationName = operation.operationName;
+  
+  // Route client operations to client service
+  if (operationName && (
+    operationName.includes('Client') || 
+    operationName.includes('client') ||
+    operationName === 'getAllClients' ||
+    operationName === 'getClientById'
+  )) {
+    console.log(`🚀 Routing ${operationName} to Client Service (port 8080)`);
+    return clientServiceLink.request(operation, forward);
+  }
+  
+  // Route goal operations to goal service
+  if (operationName && (
+    operationName.includes('Goal') || 
+    operationName.includes('goal') ||
+    operationName === 'getAllGoals' ||
+    operationName === 'getGoalsByClient'
+  )) {
+    console.log(`🎯 Routing ${operationName} to Goal Service (port 8081)`);
+    return goalServiceLink.request(operation, forward);
+  }
+  
+  // Default to client service for unknown operations
+  console.log(`🔀 Default routing ${operationName} to Client Service (port 8080)`);
+  return clientServiceLink.request(operation, forward);
+});
+
+// 🔌 Combined Client - intelligently routes requests to appropriate services
 export const combinedClient = new ApolloClient({
-  link: from([errorLink, authLink, clientServiceLink]),
+  link: from([errorLink, authLink, smartLink]),
   cache: new InMemoryCache(),
-  name: 'combined-service',
+  name: 'smart-combined-service',
   version: '1.0.0',
 });
 
 // 📝 How this works:
 // 1. We create separate clients for each service
-// 2. Each client connects to its own GraphQL endpoint
-// 3. The error link catches and logs any errors
-// 4. The auth link can add authentication headers
-// 5. Each client has its own cache for performance
+// 2. The smart link analyzes operation names to route requests
+// 3. Client operations go to port 8080, goal operations go to port 8081
+// 4. The error link catches and logs any errors
+// 5. The auth link can add authentication headers
+// 6. The combined client automatically routes requests to the right service

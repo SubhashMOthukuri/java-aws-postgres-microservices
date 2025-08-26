@@ -4,12 +4,14 @@
 import { useQuery, useMutation, useApolloClient } from '@apollo/client';
 import { 
   GET_ALL_CLIENTS, 
-  GET_CLIENT_BY_ID, 
+  GET_CLIENT_BY_ID
+} from '../graphql/queries';
+import { 
   CREATE_CLIENT, 
   UPDATE_CLIENT, 
   DELETE_CLIENT 
-} from '@/graphql/queries';
-import { Client, ClientInput } from '@/types';
+} from '../graphql/mutations';
+import { Client, ClientInput } from '../types';
 
 // 🪝 Hook for managing clients
 export const useClients = () => {
@@ -25,12 +27,13 @@ export const useClients = () => {
 
   // ➕ Create a new client
   const [createClient, { loading: createLoading }] = useMutation(CREATE_CLIENT, {
-    onCompleted: () => {
+    onCompleted: (data) => {
+      console.log('🎉 Client creation completed:', data);
       // After creating, refresh the clients list
       refetchClients();
     },
     onError: (error) => {
-      console.error('Failed to create client:', error);
+      console.error('❌ Client creation failed:', error);
     }
   });
 

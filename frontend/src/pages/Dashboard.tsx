@@ -3,8 +3,8 @@
 
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_DASHBOARD_DATA } from '@/graphql/queries';
-import { Client, Goal } from '@/types';
+import { GET_DASHBOARD_DATA } from '../graphql/queries';
+import { Client, Goal } from '../types';
 import { Link } from 'react-router-dom';
 
 // 🏠 The Dashboard component

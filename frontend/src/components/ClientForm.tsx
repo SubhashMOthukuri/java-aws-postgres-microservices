@@ -2,7 +2,7 @@
 // This component lets users create new clients or edit existing ones
 
 import React, { useState, useEffect } from 'react';
-import { Client, ClientInput } from '@/types';
+import { Client, ClientInput } from '../types';
 
 // 📝 Props for the ClientForm component
 interface ClientFormProps {

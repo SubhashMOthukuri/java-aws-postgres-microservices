@@ -2,10 +2,10 @@
 // This page lets users view, create, edit, and delete goals
 
 import React, { useState } from 'react';
-import { useGoals } from '@/hooks/useGoals';
-import { useClients } from '@/hooks/useClients';
-import { GoalForm } from '@/components/GoalForm';
-import { Goal, GoalInput } from '@/types';
+import { useGoals } from '../hooks/useGoals';
+import { useClients } from '../hooks/useClients';
+import { GoalForm } from '../components/GoalForm';
+import { Goal, GoalInput, Client } from '../types';
 
 // 🎯 The GoalsPage component
 export const GoalsPage: React.FC = () => {
@@ -69,13 +69,13 @@ export const GoalsPage: React.FC = () => {
 
   // 📝 Helper function to get client name by ID
   const getClientName = (clientId: number): string => {
-    const client = clients.find(c => c.id === clientId);
+    const client = clients.find((c: Client) => c.id === clientId);
     return client ? client.name : `Client #${clientId}`;
   };
 
   // 📝 Helper function to get client email by ID
   const getClientEmail = (clientId: number): string => {
-    const client = clients.find(c => c.id === clientId);
+    const client = clients.find((c: Client) => c.id === clientId);
     return client ? client.email : 'Unknown';
   };
 
@@ -165,7 +165,7 @@ export const GoalsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {goals.map((goal) => (
+                {goals.map((goal: Goal) => (
                   <tr key={goal.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
@@ -225,13 +225,13 @@ export const GoalsPage: React.FC = () => {
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl font-bold text-green-600">
-                ${goals.reduce((sum, goal) => sum + goal.targetAmount, 0).toLocaleString()}
+                ${goals.reduce((sum: number, goal: Goal) => sum + goal.targetAmount, 0).toLocaleString()}
               </div>
               <div className="text-sm text-gray-600">Total Target Amount</div>
             </div>
             <div className="text-center p-4 bg-gray-50 rounded-lg">
               <div className="text-2xl font-bold text-blue-600">
-                {new Set(goals.map(g => g.clientId)).size}
+                {new Set(goals.map((g: Goal) => g.clientId)).size}
               </div>
               <div className="text-sm text-gray-600">Clients with Goals</div>
             </div>
