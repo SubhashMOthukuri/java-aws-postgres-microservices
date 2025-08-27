@@ -13,7 +13,6 @@ export const GoalsPage: React.FC = () => {
   const {
     goals,
     goalsLoading,
-    goalsError,
     createGoal,
     updateGoal,
     deleteGoal,
@@ -117,14 +116,6 @@ export const GoalsPage: React.FC = () => {
           <div className="p-6 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto"></div>
             <p className="text-gray-600 mt-2">Loading goals...</p>
-          </div>
-        ) : goalsError ? (
-          // 📝 Error state
-          <div className="p-6">
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <h3 className="text-red-800 font-medium">Error loading goals</h3>
-              <p className="text-red-600 text-sm mt-1">{goalsError}</p>
-            </div>
           </div>
         ) : goals.length === 0 ? (
           // 📝 Empty state

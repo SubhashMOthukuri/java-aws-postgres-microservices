@@ -3,7 +3,7 @@
 
 import { gql } from '@apollo/client';
 
-// 📋 Get all clients from the client service
+// 📋 Get all clients (basic version - matches backend schema)
 export const GET_ALL_CLIENTS = gql`
   query GetAllClients {
     getAllClients {
@@ -25,7 +25,7 @@ export const GET_CLIENT_BY_ID = gql`
   }
 `;
 
-// 📋 Get all goals from the goal service
+// 📋 Get all goals (basic version - matches backend schema)
 export const GET_ALL_GOALS = gql`
   query GetAllGoals {
     getAllGoals {
@@ -61,7 +61,7 @@ export const GET_GOALS_BY_CLIENT = gql`
   }
 `;
 
-// 📊 Get dashboard data (clients and goals count)
+// 📊 Get dashboard data (using existing backend fields)
 export const GET_DASHBOARD_DATA = gql`
   query GetDashboardData {
     getAllClients {
@@ -77,3 +77,10 @@ export const GET_DASHBOARD_DATA = gql`
     }
   }
 `;
+
+// 📝 How these queries work:
+// 1. All queries match the actual backend GraphQL schema
+// 2. Basic CRUD operations for clients and goals
+// 3. Dashboard combines existing queries for overview
+// 4. No pagination parameters yet (backend doesn't support them)
+// 5. No filtering parameters yet (backend doesn't support them)

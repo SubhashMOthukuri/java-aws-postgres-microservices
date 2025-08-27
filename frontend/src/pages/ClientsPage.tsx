@@ -17,7 +17,8 @@ export const ClientsPage: React.FC = () => {
     updateClient,
     deleteClient,
     createLoading,
-    updateLoading
+    updateLoading,
+    deleteLoading
   } = useClients();
 
   // 📝 State for managing the form
@@ -181,14 +182,24 @@ export const ClientsPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* 📊 Results Summary */}
+      {!clientsLoading && clients.length > 0 && (
+        <div className="bg-white p-4 rounded-lg shadow-sm text-center">
+          <p className="text-sm text-gray-600">
+            Showing {clients.length} clients
+          </p>
+        </div>
+      )}
     </div>
   );
 };
 
 // 📝 How this ClientsPage component works:
-// 1. It uses our custom useClients hook for all operations
+// 1. It uses our useClients hook for all operations
 // 2. It shows a form for creating/editing clients
 // 3. It displays clients in a clean table format
 // 4. It handles loading, error, and empty states
 // 5. It provides edit and delete actions for each client
 // 6. It's fully responsive and user-friendly
+// 7. Enhanced features (pagination, filtering) will be added when backend supports them

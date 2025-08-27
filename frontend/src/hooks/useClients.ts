@@ -23,17 +23,19 @@ export const useClients = () => {
     loading: clientsLoading, 
     error: clientsError,
     refetch: refetchClients 
-  } = useQuery(GET_ALL_CLIENTS);
+  } = useQuery(GET_ALL_CLIENTS, {
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network', // Use cache but also fetch fresh data
+  });
 
   // ➕ Create a new client
   const [createClient, { loading: createLoading }] = useMutation(CREATE_CLIENT, {
-    onCompleted: (data) => {
-      console.log('🎉 Client creation completed:', data);
+    onCompleted: () => {
       // After creating, refresh the clients list
       refetchClients();
     },
     onError: (error) => {
-      console.error('❌ Client creation failed:', error);
+      console.error('Failed to create client:', error);
     }
   });
 
@@ -63,7 +65,8 @@ export const useClients = () => {
   const getClientById = (id: string) => {
     return useQuery(GET_CLIENT_BY_ID, {
       variables: { id },
-      skip: !id
+      skip: !id,
+      fetchPolicy: 'cache-first', // Use cache first for individual clients
     });
   };
 
@@ -128,7 +131,12 @@ export const useClients = () => {
     // Raw mutations (if needed)
     createClientMutation: createClient,
     updateClientMutation: updateClient,
-    deleteClientMutation: deleteClient
+    deleteClientMutation: deleteClient,
+    
+    // Cache management
+    clearCache: () => {
+      client.clearStore();
+    }
   };
 };
 
@@ -138,3 +146,5 @@ export const useClients = () => {
 // 3. It provides loading states for better UX
 // 4. It handles errors gracefully
 // 5. It gives you both simple functions and raw mutations
+// 6. It uses cache-and-network fetch policy for optimal performance
+// 7. It provides cache management utilities
