@@ -30,13 +30,18 @@ const goalServiceLink = createHttpLink({
   uri: 'http://localhost:8081/graphql',
 });
 
-// 🔧 Context link - adds any headers or authentication we might need
+// JWT token management
+const getToken = (): string | null => {
+  return localStorage.getItem('jwt_token');
+};
+
+// 🔧 Context link - adds JWT authentication headers
 const authLink = setContext((_, { headers }) => {
+  const token = getToken();
   return {
     headers: {
       ...headers,
-      // We can add authentication tokens here later
-      // authorization: `Bearer ${getToken()}`,
+      ...(token && { authorization: `Bearer ${token}` }),
     }
   };
 });

@@ -9,34 +9,55 @@ import { Dashboard } from './pages/Dashboard';
 import { ClientsPage } from './pages/ClientsPage';
 import { GoalsPage } from './pages/GoalsPage';
 import { Navigation } from './components/Navigation';
+import { AuthPage } from './pages/AuthPage';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { AuthProvider } from './contexts/AuthContext';
 
 // 🚀 The main App component
 function App() {
   return (
     // 🔌 Apollo Provider with combined client for both services
     <ApolloProvider client={combinedClient}>
-      {/* 🌐 Router for navigation */}
-      <Router>
-        <div className="min-h-screen bg-gray-50">
-          {/* 🧭 Navigation bar */}
-          <Navigation />
-          
-          {/* 📱 Main content area */}
-          <main className="container mx-auto px-4 py-8">
-            {/* 🛣️ Route definitions */}
-            <Routes>
-              {/* 🏠 Dashboard - shows overview of everything */}
-              <Route path="/" element={<Dashboard />} />
-              
-              {/* 👥 Clients page - manage clients */}
-              <Route path="/clients" element={<ClientsPage />} />
-              
-              {/* 🎯 Goals page - manage goals */}
-              <Route path="/goals" element={<GoalsPage />} />
-            </Routes>
-          </main>
-        </div>
-      </Router>
+      {/* 🔐 Authentication Provider */}
+      <AuthProvider>
+        {/* 🌐 Router for navigation */}
+        <Router>
+          <div className="min-h-screen bg-gray-50">
+            {/* 🧭 Navigation bar */}
+            <Navigation />
+            
+            {/* 📱 Main content area */}
+            <main className="container mx-auto px-4 py-8">
+              {/* 🛣️ Route definitions */}
+              <Routes>
+                {/* 🔐 Authentication page - public access */}
+                <Route path="/auth" element={<AuthPage />} />
+                
+                {/* 🏠 Dashboard - requires authentication */}
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                
+                {/* 👥 Clients page - requires authentication */}
+                <Route path="/clients" element={
+                  <ProtectedRoute>
+                    <ClientsPage />
+                  </ProtectedRoute>
+                } />
+                
+                {/* 🎯 Goals page - requires authentication */}
+                <Route path="/goals" element={
+                  <ProtectedRoute>
+                    <GoalsPage />
+                  </ProtectedRoute>
+                } />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </AuthProvider>
     </ApolloProvider>
   );
 }

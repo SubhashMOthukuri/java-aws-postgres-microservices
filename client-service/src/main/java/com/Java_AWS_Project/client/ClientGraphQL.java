@@ -2,6 +2,7 @@ package com.Java_AWS_Project.client;
 
 import com.Java_AWS_Project.client.Client;
 import com.Java_AWS_Project.client.ClientService;
+import com.Java_AWS_Project.client.security.RequireRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -21,15 +22,17 @@ public class ClientGraphQL {
         this.clientService = clientService;
     }
 
-    // ✅ Query: Get all clients
+    // ✅ Query: Get all clients - Requires USER role
     @QueryMapping
+    @RequireRole("USER")
     public List<Client> getAllClients() {
         logger.info("GraphQL Query: Fetching all clients");
         return clientService.getAllClients();
     }
 
-    // ✅ Query: Get client by ID
+    // ✅ Query: Get client by ID - Requires USER role
     @QueryMapping
+    @RequireRole("USER")
     public Client getClient(@Argument Long id) {
         logger.info("GraphQL Query: Fetching client by id={}", id);
         
@@ -41,8 +44,9 @@ public class ClientGraphQL {
         return clientService.getClientById(id);
     }
 
-    // ✅ Query: Get client by ID (alias)
+    // ✅ Query: Get client by ID (alias) - Requires USER role
     @QueryMapping
+    @RequireRole("USER")
     public Client getClientById(@Argument Long id) {
         logger.info("GraphQL Query: Fetching client by id={}", id);
         
@@ -54,8 +58,9 @@ public class ClientGraphQL {
         return clientService.getClientById(id);
     }
 
-    // ✅ Mutation: Create client
+    // ✅ Mutation: Create client - Requires USER role
     @MutationMapping
+    @RequireRole("USER")
     public Client createClient(@Argument String name, @Argument String email) {
         logger.info("GraphQL Mutation: Creating client with name={}, email={}", name, email);
         
@@ -78,8 +83,9 @@ public class ClientGraphQL {
         return clientService.createClient(client);
     }
 
-    // ✅ Mutation: Update client
+    // ✅ Mutation: Update client - Requires USER role
     @MutationMapping
+    @RequireRole("USER")
     public Client updateClient(@Argument Long id, @Argument String name, @Argument String email) {
         logger.info("GraphQL Mutation: Updating client id={}, name={}, email={}", id, name, email);
         
@@ -105,8 +111,9 @@ public class ClientGraphQL {
         return clientService.updateClient(id, clientDetails);
     }
 
-    // ✅ Mutation: Delete client
+    // ✅ Mutation: Delete client - Requires ADMIN role (more restrictive)
     @MutationMapping
+    @RequireRole("ADMIN")
     public Boolean deleteClient(@Argument Long id) {
         logger.info("GraphQL Mutation: Deleting client id={}", id);
         
