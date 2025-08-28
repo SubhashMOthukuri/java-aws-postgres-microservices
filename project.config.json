@@ -1,0 +1,47 @@
+{
+  "project": {
+    "name": "Java AWS Postgres Microservices",
+    "version": "1.0.0",
+    "description": "Cloud-native microservices application with Spring Boot, React, and AWS infrastructure",
+    "type": "microservices"
+  },
+  "services": {
+    "client-service": {
+      "port": 8080,
+      "type": "spring-boot",
+      "language": "java",
+      "framework": "spring-boot",
+      "database": "postgresql"
+    },
+    "goal-service": {
+      "port": 8081,
+      "type": "spring-boot",
+      "language": "java",
+      "framework": "spring-boot",
+      "database": "postgresql"
+    },
+    "frontend": {
+      "port": 3000,
+      "type": "react",
+      "language": "typescript",
+      "framework": "react-18"
+    }
+  },
+  "infrastructure": {
+    "aws": {
+      "cdk": true,
+      "services": ["ecs", "rds", "elasticache", "mq", "alb", "vpc"]
+    },
+    "docker": {
+      "compose": true,
+      "kubernetes": true
+    }
+  },
+  "directories": {
+    "services": ["client-service", "goal-service", "common", "frontend"],
+    "infrastructure": ["infrastructure/aws", "infrastructure/docker", "infrastructure/kubernetes"],
+    "deployment": ["deployment/scripts", "deployment/configs"],
+    "documentation": ["documentation/guides", "documentation/api", "documentation/architecture"],
+    "logs": "logs"
+  }
+}
