@@ -1,6 +1,6 @@
 # 🚀 Microservices Manager - Complete Full-Stack Application
 
-A comprehensive microservices application with Spring Boot backend services and React frontend, featuring event-driven architecture, GraphQL APIs, and modern web technologies.
+A comprehensive microservices application with Spring Boot backend services and React frontend, featuring event-driven architecture, GraphQL APIs, **AWS cloud-native infrastructure**, **Docker containerization**, and modern web technologies.
 
 ## 🏗️ **Architecture Overview**
 
@@ -24,6 +24,24 @@ A comprehensive microservices application with Spring Boot backend services and 
               └─────────────────┘    └─────────────────┘
 ```
 
+## ☁️ **AWS Cloud-Native Infrastructure**
+
+### **🚀 AWS CDK Stack**
+- **Infrastructure as Code**: Complete AWS infrastructure defined in TypeScript
+- **Auto-scaling**: ECS Fargate services with auto-scaling policies
+- **Load Balancing**: Application Load Balancer with health checks
+- **Database**: RDS PostgreSQL with multi-AZ deployment
+- **Caching**: ElastiCache Redis cluster
+- **Message Queue**: Amazon MQ (RabbitMQ) managed service
+- **Monitoring**: CloudWatch logs and metrics
+- **Security**: VPC, security groups, and IAM roles
+
+### **🐳 Docker & Containerization**
+- **Multi-stage builds**: Optimized production images
+- **Development containers**: Hot-reload enabled containers
+- **Docker Compose**: Local development environment
+- **Kubernetes manifests**: Ready for K8s deployment
+
 ## 🎯 **Features**
 
 ### **Backend Services**
@@ -33,6 +51,7 @@ A comprehensive microservices application with Spring Boot backend services and 
 - **💾 Data Storage**: H2 in-memory databases with PostgreSQL drivers
 - **⚡ Caching**: Redis integration for performance optimization
 - **🔍 GraphQL**: Modern query language with GraphiQL playground
+- **☁️ AWS Lambda**: Serverless event processors for scalability
 
 ### **Frontend Application**
 - **⚛️ React 18**: Modern React with TypeScript
@@ -41,13 +60,16 @@ A comprehensive microservices application with Spring Boot backend services and 
 - **🧭 React Router**: Client-side navigation
 - **📱 Responsive Design**: Mobile-first approach
 - **🔄 Real-time Updates**: Automatic data refresh
+- **🐳 Containerized**: Docker support for easy deployment
 
 ### **Infrastructure**
 - **🐳 Docker Compose**: Local development environment
+- **☁️ AWS CDK**: Cloud infrastructure as code
 - **☕ Java 17**: Backend runtime
 - **📦 Maven**: Build automation
 - **🔄 Event-Driven**: Microservices communication
 - **🔒 CORS Enabled**: Cross-origin resource sharing
+- **☸️ Kubernetes**: Production deployment ready
 
 ## 🚀 **Quick Start**
 
@@ -56,6 +78,8 @@ A comprehensive microservices application with Spring Boot backend services and 
 - Node.js 18+ and npm
 - Docker and Docker Compose
 - Maven 3.6+
+- AWS CLI (for cloud deployment)
+- Node.js 18+ (for AWS CDK)
 
 ### **1. Clone and Setup**
 ```bash
@@ -63,21 +87,23 @@ git clone <your-repo-url>
 cd Java_Aws_Postgres
 ```
 
-### **2. Start Infrastructure**
+### **2. Start Infrastructure (Local Development)**
 ```bash
 # Start Redis, RabbitMQ, PostgreSQL, and H2 Console
 docker-compose up -d
+
+# Or use the management script
+./docker-manage.sh start
 ```
 
 ### **3. Build Backend Services**
 ```bash
-# Build common module
+# Build all services with Docker
+./build-docker.sh
+
+# Or build manually
 cd common && mvn clean install
-
-# Build client service
 cd ../client-service && mvn clean package
-
-# Build goal service
 cd ../goal-service && mvn clean package
 ```
 
@@ -111,6 +137,91 @@ npm start
   - Goal Service: http://localhost:8081/graphiql
 - **💾 H2 Console**: http://localhost:8082 (JDBC: `jdbc:h2:mem:px_client`)
 
+## ☁️ **AWS Cloud Deployment**
+
+### **1. Setup AWS CDK**
+```bash
+cd aws-cdk
+npm install
+```
+
+### **2. Configure AWS Credentials**
+```bash
+aws configure
+# Enter your AWS Access Key ID, Secret Access Key, and region
+```
+
+### **3. Deploy Infrastructure**
+```bash
+# Deploy the complete stack
+./deploy.sh
+
+# Or deploy manually
+npx cdk deploy
+```
+
+### **4. Test AWS Services**
+```bash
+# Test all deployed services
+./test-aws-services.sh
+```
+
+## 🐳 **Docker Deployment**
+
+### **Development Environment**
+```bash
+# Start development containers
+docker-compose -f docker-compose.dev.yml up -d
+
+# View logs
+docker-compose -f docker-compose.dev.yml logs -f
+```
+
+### **Production Environment**
+```bash
+# Build and start production containers
+docker-compose up -d
+
+# Scale services
+docker-compose up -d --scale client-service=3 --scale goal-service=3
+```
+
+### **Individual Service Deployment**
+```bash
+# Build client service
+cd client-service
+docker build -f Dockerfile -t client-service:latest .
+
+# Run client service
+docker run -p 8080:8080 client-service:latest
+```
+
+## ☸️ **Kubernetes Deployment**
+
+### **1. Create Namespace**
+```bash
+kubectl apply -f k8s/namespace.yaml
+```
+
+### **2. Deploy Services**
+```bash
+# Deploy PostgreSQL
+kubectl apply -f k8s/postgres-deployment.yaml
+
+# Deploy client service
+kubectl apply -f k8s/client-service-deployment.yaml
+
+# Apply configuration
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/secrets.yaml
+```
+
+### **3. Check Deployment Status**
+```bash
+kubectl get pods -n microservices
+kubectl get services -n microservices
+```
+
 ## 🧪 **Testing the System**
 
 ### **Create a Client**
@@ -132,6 +243,19 @@ npm start
 
 ## 🔧 **Recent Fixes & Improvements**
 
+### **✅ AWS Cloud Infrastructure**
+- Complete AWS CDK stack with TypeScript
+- ECS Fargate services with auto-scaling
+- RDS PostgreSQL and ElastiCache Redis
+- Application Load Balancer and VPC setup
+- CloudWatch monitoring and logging
+
+### **✅ Docker & Containerization**
+- Multi-stage Dockerfiles for all services
+- Development and production container configurations
+- Docker Compose for local development
+- Kubernetes deployment manifests
+
 ### **✅ CORS Configuration**
 - Added CORS beans to both Spring Boot services
 - Enabled cross-origin requests from frontend (localhost:3000)
@@ -147,6 +271,7 @@ npm start
 - RabbitMQ message producers and consumers
 - Automatic event propagation between services
 - Database independence through events
+- AWS Lambda processors for scalability
 
 ### **✅ GraphQL Integration**
 - Complete GraphQL schema definitions
@@ -164,20 +289,31 @@ npm start
 
 ```
 Java_Aws_Postgres/
+├── 📁 aws-cdk/                 # AWS CDK infrastructure code
+│   ├── 🗂️ bin/                 # CDK app entry point
+│   ├── 🗂️ lib/                 # CDK stack definitions
+│   ├── 📄 package.json         # Node.js dependencies
+│   ├── 📄 deploy.sh            # Deployment script
+│   └── 📄 test-aws-services.sh # AWS service testing
 ├── 📁 client-service/          # Client management microservice
 │   ├── 🗂️ src/main/java/      # Java source code
 │   ├── 🗂️ src/main/resources/ # Configuration files
 │   ├── 🗂️ target/             # Compiled artifacts
-│   └── 📄 pom.xml             # Maven dependencies
+│   ├── 📄 Dockerfile           # Production container
+│   ├── 📄 Dockerfile.dev       # Development container
+│   └── 📄 pom.xml              # Maven dependencies
 ├── 📁 goal-service/            # Goal management microservice
 │   ├── 🗂️ src/main/java/      # Java source code
 │   ├── 🗂️ src/main/resources/ # Configuration files
 │   ├── 🗂️ target/             # Compiled artifacts
-│   └── 📄 pom.xml             # Maven dependencies
+│   ├── 📄 Dockerfile           # Production container
+│   ├── 📄 Dockerfile.dev       # Development container
+│   └── 📄 pom.xml              # Maven dependencies
 ├── 📁 common/                  # Shared components and DTOs
 │   ├── 🗂️ src/main/java/      # Common Java classes
 │   ├── 🗂️ target/             # Compiled artifacts
-│   └── 📄 pom.xml             # Maven dependencies
+│   ├── 📄 Dockerfile           # Common service container
+│   └── 📄 pom.xml              # Maven dependencies
 ├── 📁 frontend/                # React frontend application
 │   ├── 🗂️ src/                # React source code
 │   │   ├── 🗂️ components/     # Reusable UI components
@@ -186,19 +322,33 @@ Java_Aws_Postgres/
 │   │   ├── 🗂️ graphql/        # GraphQL queries and client
 │   │   └── 🗂️ types/          # TypeScript type definitions
 │   ├── 🗂️ public/             # Static assets
-│   ├── 📄 package.json        # Node.js dependencies
-│   ├── 📄 tsconfig.json       # TypeScript configuration
-│   └── 📄 tailwind.config.js  # Tailwind CSS configuration
+│   ├── 📄 Dockerfile           # Production container
+│   ├── 📄 Dockerfile.dev       # Development container
+│   ├── 📄 nginx.conf           # Nginx configuration
+│   ├── 📄 package.json         # Node.js dependencies
+│   ├── 📄 tsconfig.json        # TypeScript configuration
+│   └── 📄 tailwind.config.js   # Tailwind CSS configuration
+├── 📁 k8s/                     # Kubernetes manifests
+│   ├── 📄 namespace.yaml       # Kubernetes namespace
+│   ├── 📄 postgres-deployment.yaml # PostgreSQL deployment
+│   ├── 📄 client-service-deployment.yaml # Client service deployment
+│   ├── 📄 configmap.yaml       # Configuration
+│   └── 📄 secrets.yaml         # Secrets management
 ├── 📁 docs/                    # Documentation
 │   ├── 📄 QUICK_START.md      # Quick start guide
-│   ├── 📄 architecture/       # Architecture documentation
+│   ├── 📄 architecture/        # Architecture documentation
 │   └── 📄 PROJECT_STRUCTURE.md # Project organization
 ├── 📁 scripts/                 # Utility scripts
-│   ├── 📄 start-services.sh   # Start backend services
-│   └── 📄 build-all.sh        # Build all modules
-├── 📄 docker-compose.yml      # Infrastructure setup
-├── 📄 README.md               # This file
-└── 📄 .gitignore              # Git ignore rules
+│   ├── 📄 start-services.sh    # Start backend services
+│   └── 📄 build-all.sh         # Build all modules
+├── 📄 docker-compose.yml       # Production Docker setup
+├── 📄 docker-compose.dev.yml   # Development Docker setup
+├── 📄 build-docker.sh          # Docker build script
+├── 📄 docker-manage.sh         # Docker management script
+├── 📄 AWS_IMPLEMENTATION_GUIDE.md # AWS deployment guide
+├── 📄 DOCKER_README.md         # Docker usage guide
+├── 📄 README.md                # This file
+└── 📄 .gitignore               # Git ignore rules
 ```
 
 ## 🔌 **API Endpoints**
@@ -282,12 +432,42 @@ tail -f client-service/client-service.log
 tail -f goal-service/goal-service.log
 ```
 
+#### **Docker Issues**
+```bash
+# Check Docker status
+docker ps
+docker-compose ps
+
+# Restart Docker services
+./docker-manage.sh restart
+
+# Clean up containers
+docker-compose down -v
+```
+
+#### **AWS CDK Issues**
+```bash
+# Check CDK status
+cd aws-cdk
+npx cdk list
+
+# Destroy and redeploy
+npx cdk destroy
+npx cdk deploy
+```
+
 ### **Service Status Check**
 ```bash
 # Check all services
 curl http://localhost:3000  # Frontend
 curl http://localhost:8080/actuator/health  # Client Service
 curl http://localhost:8081/actuator/health  # Goal Service
+
+# Check Docker services
+docker-compose ps
+
+# Check Kubernetes services
+kubectl get pods -n microservices
 ```
 
 ## 🎉 **Current Status**
@@ -300,6 +480,9 @@ curl http://localhost:8081/actuator/health  # Goal Service
 - **💾 Redis**: Cache service running
 - **🐘 PostgreSQL**: Database service running
 - **🔍 H2 Console**: Database management interface
+- **🐳 Docker**: Containerization ready
+- **☁️ AWS CDK**: Infrastructure as code ready
+- **☸️ Kubernetes**: Deployment manifests ready
 
 ### **🧪 Test Data Available**
 - Multiple clients created successfully
@@ -307,6 +490,8 @@ curl http://localhost:8081/actuator/health  # Goal Service
 - Event-driven communication working
 - GraphQL APIs responding correctly
 - CORS enabled for frontend communication
+- Docker containers building and running
+- AWS infrastructure deployable
 
 ## 🚀 **Next Steps**
 
@@ -314,6 +499,8 @@ curl http://localhost:8081/actuator/health  # Goal Service
 1. **Test the Frontend**: Create clients and goals through the UI
 2. **Verify Dashboard**: Check that data appears correctly
 3. **Test GraphQL**: Use GraphiQL to explore APIs
+4. **Test Docker**: Build and run containers locally
+5. **Deploy to AWS**: Use CDK to deploy cloud infrastructure
 
 ### **Future Enhancements**
 - Add authentication and authorization
@@ -322,6 +509,8 @@ curl http://localhost:8081/actuator/health  # Goal Service
 - Create mobile-responsive design
 - Add unit and integration tests
 - Implement CI/CD pipeline
+- Add monitoring and alerting
+- Implement blue-green deployments
 
 ## 📚 **Documentation**
 
@@ -329,6 +518,8 @@ curl http://localhost:8081/actuator/health  # Goal Service
 - **🏗️ Architecture**: [docs/architecture/](docs/architecture/)
 - **📁 Project Structure**: [docs/architecture/PROJECT_STRUCTURE.md](docs/architecture/PROJECT_STRUCTURE.md)
 - **🔄 Microservices Flow**: [docs/architecture/MICROSERVICES_FLOW.md](docs/architecture/MICROSERVICES_FLOW.md)
+- **☁️ AWS Implementation**: [AWS_IMPLEMENTATION_GUIDE.md](AWS_IMPLEMENTATION_GUIDE.md)
+- **🐳 Docker Guide**: [DOCKER_README.md](DOCKER_README.md)
 
 ## 🤝 **Contributing**
 
@@ -344,6 +535,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**🎉 Your complete microservices application is now running and ready for development!**
+**🎉 Your complete microservices application is now running with cloud-native infrastructure, Docker support, and Kubernetes deployment ready!**
 
 **For support or questions, please check the documentation or create an issue in the repository.**
