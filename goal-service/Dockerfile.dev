@@ -1,0 +1,27 @@
+# Development Dockerfile for Goal Service
+FROM maven:latest
+
+# Set working directory
+WORKDIR /app
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Copy pom.xml first for dependency caching
+COPY pom.xml .
+
+# Copy source code
+COPY src ./src
+
+# Copy source code
+COPY src ./src
+
+# Expose ports
+EXPOSE 8081 5006
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8081/actuator/health || exit 1
+
+# Command to run with hot reload
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006'"]

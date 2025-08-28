@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: microservices-app
+data:
+  # Database Configuration
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres-service:5432/microservices_db"
+  SPRING_DATASOURCE_DRIVER_CLASS_NAME: "org.postgresql.Driver"
+  SPRING_DATASOURCE_USERNAME: "postgres"
+  SPRING_DATASOURCE_PASSWORD: "postgres123"
+  
+  # Redis Configuration
+  SPRING_REDIS_HOST: "redis-service"
+  SPRING_REDIS_PORT: "6379"
+  
+  # RabbitMQ Configuration
+  SPRING_RABBITMQ_HOST: "rabbitmq-service"
+  SPRING_RABBITMQ_PORT: "5672"
+  SPRING_RABBITMQ_USERNAME: "admin"
+  SPRING_RABBITMQ_PASSWORD: "admin123"
+  
+  # JWT Configuration
+  JWT_SECRET: "your-super-secret-jwt-key-here-make-it-long-and-random"
+  JWT_EXPIRATION: "86400000"
+  
+  # Application Configuration
+  SPRING_PROFILES_ACTIVE: "kubernetes"
+  SERVER_PORT: "8080"

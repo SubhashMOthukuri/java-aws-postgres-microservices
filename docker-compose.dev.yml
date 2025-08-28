@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # Client Service - Development with hot reload
+  client-service:
+    build:
+      context: ./client-service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./client-service:/app
+      - ~/.m2:/root/.m2
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_ADD_PROPERTIES: "true"
+    ports:
+      - "8080:8080"
+      - "5005:5005"  # Debug port
+    command: ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'"]
+
+  # Goal Service - Development with hot reload
+  goal-service:
+    build:
+      context: ./goal-service
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./goal-service:/app
+      - ~/.m2:/root/.m2
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DEVTOOLS_RESTART_ENABLED: "true"
+      SPRING_DEVTOOLS_ADD_PROPERTIES: "true"
+    ports:
+      - "8081:8081"
+      - "5006:5006"  # Debug port
+    command: ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006'"]
+
+  # Frontend - Development with hot reload
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+    command: ["npm", "start"]
+
+  # PostgreSQL - Development with data persistence
+  postgres:
+    environment:
+      POSTGRES_DB: microservices_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+  # Redis - Development with persistence
+  redis:
+    command: redis-server --appendonly yes --save 60 1000
+    volumes:
+      - redis_dev_data:/data
+
+  # RabbitMQ - Development with management
+  rabbitmq:
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
